@@ -4,7 +4,7 @@ import discord
 from discord import app_commands
 from discord.ext import tasks
 
-from commands import birthday_add, birthday_delete
+from commands import birthday_add, birthday_delete, birthday_get
 from config import DISCORD_BOT_TOKEN, COMMAND_GUILD_IDS
 from message import happy_birthday_message
 from model import read_birthday_file
@@ -26,7 +26,10 @@ class MyClient(discord.Client):
             birthday = data[discord_id]
             if (birthday["month"] == now.month and birthday["day"] == now.day and
                     birthday["notification_hour"] == now.hour):
-                await happy_birthday_message(self, discord_id)
+                if "year" in birthday:
+                    await happy_birthday_message(self, discord_id, now.year - birthday["year"])
+                else:
+                    await happy_birthday_message(self, discord_id, None)
 
     @birthday_monitor_task.before_loop
     async def before_my_task(self):
@@ -36,14 +39,21 @@ class MyClient(discord.Client):
         print("Logged on as {0}!".format(self.user))
         slash_command = app_commands.CommandTree(client)
         command = discord.app_commands.Command(name="add_birthday",
-                                               description="Add your birthday to the bot",
+                                               description="Add your birthday to the bot.",
                                                callback=birthday_add,
                                                guild_ids=COMMAND_GUILD_IDS)
         command.guild_only = True
         slash_command.add_command(command)
 
+        command = discord.app_commands.Command(name="get_birthday",
+                                               description="Retrieve your birthday from the bot.",
+                                               callback=birthday_get,
+                                               guild_ids=COMMAND_GUILD_IDS)
+        command.guild_only = True
+        slash_command.add_command(command)
+
         command = discord.app_commands.Command(name="delete_birthday",
-                                               description="Delete your birthday from the bot",
+                                               description="Delete your birthday from the bot.",
                                                callback=birthday_delete,
                                                guild_ids=COMMAND_GUILD_IDS)
         command.guild_only = True
