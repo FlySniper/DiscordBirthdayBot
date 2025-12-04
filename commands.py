@@ -40,6 +40,13 @@ async def birthday_delete(interaction: Interaction):
 async def birthday_get(interaction: Interaction):
     await interaction.response.defer()
     data = read_birthday_file()
+    if str(interaction.user.id) not in data:
+        embed = discord.embeds.Embed()
+        embed.title = "No Birthday"
+        embed.description = "Your birthday isn't registered with the bot."
+        embed.color = 0xFF0000
+        await interaction.followup.send(embed=embed)
+        return
     birthday_data = data[str(interaction.user.id)]
     month = birthday_data.get("month", 1)
     day = birthday_data.get("day", 1)
