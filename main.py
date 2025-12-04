@@ -17,8 +17,8 @@ class MyClient(discord.Client):
     async def setup_hook(self) -> None:
         self.birthday_monitor_task.start()
 
-    #@tasks.loop(time=[datetime.time(hour=hour, minute=0, second=0) for hour in range(0, 24)])
-    @tasks.loop(time=[datetime.time(hour=1, minute=min, second=0) for min in range(0, 60)])
+    @tasks.loop(time=[datetime.time(hour=hour, minute=0, second=0) for hour in range(0, 24)])
+    #@tasks.loop(time=[datetime.time(hour=1, minute=min, second=0) for min in range(0, 60)])
     async def birthday_monitor_task(self):
         now = datetime.datetime.now()
         data = read_birthday_file()
