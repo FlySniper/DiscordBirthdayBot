@@ -47,7 +47,7 @@ async def birthday_get(interaction: Interaction):
     year = birthday_data.get("year", -1)
     embed = discord.embeds.Embed()
     embed.title = "Your Birthday"
-    if year == -1:
+    if year != -1:
         embed.description = f"<@!{interaction.user.id}>'s birthday is {month}/{day}/{year}-{hour}:00."
     else:
         embed.description = f"<@!{interaction.user.id}>'s birthday is {month}/{day}-{hour}:00."
