@@ -1,0 +1,4 @@
+config.py
+birthday_db.json
+__pycache__/
+.idea
