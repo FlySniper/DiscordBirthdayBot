@@ -2,3 +2,5 @@ config.py
 birthday_db.json
 __pycache__/
 .idea
+build
+DiscordBirthdayBot.egg-info
